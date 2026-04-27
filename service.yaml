@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: catfish-service
+  annotations:
+    # 1. Use the modern Network Load Balancer
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    
+    # 2. Make it accessible from Lagos/Internet
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+    
+    # 3. The Health Check (This is what fixes the "Empty Response")
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-protocol: "http"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "5000"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: "/"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-interval: "10"
+    service.beta.kubernetes.io/aws-load-balancer-healthy-threshold: "2"
+spec:
+  type: LoadBalancer
+  selector:
+    app: catfish-app
+  ports:
+    - protocol: TCP
+      port: 80          # External port (Browser)
+      targetPort: 5000  # Internal port (Your App)

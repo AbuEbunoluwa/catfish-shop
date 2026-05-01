@@ -2,28 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: catfish-app
-  namespace: default
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: catfish-app
+      app: catfish-shop
   template:
     metadata:
       labels:
-        app: catfish-app
+        app: catfish-shop
     spec:
       containers:
-      - name: catfish-app
-        # This MUST match your successful push!
-        image: 624782989130.dkr.ecr.us-east-1.amazonaws.com/catfish-app:v3
+      - name: catfish-container
+        image: docker.io/library/catfish-app-v2:latest
+        imagePullPolicy: Never
         ports:
-        - containerPort: 5000
-        # Fargate REQUIRES these resources section
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "256m"
-          limits:
-            memory: "512Mi"
-            cpu: "256m"
+        - containerPort: 8080

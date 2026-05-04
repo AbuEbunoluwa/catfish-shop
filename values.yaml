@@ -1,0 +1,12 @@
+replicaCount: 2
+image:
+  repository: catfish-app-v2
+  tag: latest
+  pullPolicy: Never
+service:
+  type: NodePort
+  port: 80
+  targetPort: 80
+  nodePort: 30080
+app:
+  name: catfish-shop
